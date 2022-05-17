@@ -38,7 +38,7 @@ jobs:
       - name: run tests
         run: |
           poetry run pytest "tests/" \
-          --verbose -n2 \
+          --verbose  \
           --cov=yaad \
           --pyargs "yaad" \
           --cov-report=html --cov-report=term --cov-report=xml

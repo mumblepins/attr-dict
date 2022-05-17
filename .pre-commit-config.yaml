@@ -93,19 +93,20 @@ repos:
             "-rn", # Only display messages
             "-sn", # Don't display the score
           ]
-#      - id: pytest-local
-#        name: pytest-local
-#        description: Run pytest in the local virtualenv
-#        stage: manual
-#        entry: >
-#          pytest
-#          "tests/"
-#          --verbose
-#          --cov=yaad
-#          --pyargs "yaad"
-#        #          --doctest-modules
-#        #          --random-order-bucket="parent"
-#        language: system
-#        # ignore all files, run on hard-coded modules instead
-#        pass_filenames: false
-#        always_run: true
+      - id: pytest-local
+        name: pytest-local
+        description: Run pytest in the local virtualenv
+        stages:
+          - manual
+        entry: >
+          pytest
+          "tests/"
+          --verbose
+          --cov=yaad
+          --pyargs "yaad"
+        #          --doctest-modules
+        #          --random-order-bucket="parent"
+        language: system
+        # ignore all files, run on hard-coded modules instead
+        pass_filenames: false
+        always_run: true
