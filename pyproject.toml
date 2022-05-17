@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "yaad"
-version = "0.1.0"
+version = "1.0.0"
 license = "MIT"
 description = "Yet Another Attribute Dict"
 authors = ["Daniel Sullivan <mumblepins@users.noreply.github.com>"]
