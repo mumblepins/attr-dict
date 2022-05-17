@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import itertools
-from collections.abc import MutableMapping
-from typing import Mapping, Tuple
+from collections.abc import Mapping, MutableMapping
+from typing import Tuple
 
 
 class AttrDict(MutableMapping):
