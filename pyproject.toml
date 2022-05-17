@@ -1,18 +1,96 @@
 [tool.poetry]
 name = "yaad"
 version = "0.1.0"
-license="MIT"
+license = "MIT"
 description = "Yet Another Attribute Dict"
-authors = ["Daniel Sullivan <mumblepins@users.noreply.github.com >"]
+authors = ["Daniel Sullivan <mumblepins@users.noreply.github.com>"]
 readme = "README.md"
-repository="https://github.com/mumblepins/yaad"
-homepage="https://github.com/mumblepins/yaad"
-packages = [{include = "yaad"}]
+repository = "https://github.com/mumblepins/yaad"
+homepage = "https://github.com/mumblepins/yaad"
+packages = [{ include = "yaad", from = "src" }]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = ">=3.7"
 
+[tool.poetry.group.dev.dependencies]
+pylint = "^2.13.0"
+pytest = "^7.1.1"
+coverage = "^6.3.2"
+pre-commit = "^2.15.0"
+Sphinx = "^4.4"
+sphinx-rtd-theme = "^1.0"
+mypy = "^0.942"
+pytest-cov = "^3.0.0"
+pylint-pytest = "^1.1.2"
 
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core>=1.1.0a7"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
+skip_gitignore = true
+line_length = 88
+indent = "    "
+multi_line_output = 3
+default_section = "FIRSTPARTY"
+skip = "env"
+include_trailing_comma = true
+combine_as_imports = true
+force_grid_wrap = 0
+
+[tool.black]
+line-length = 160
+include = '\.pyi?$'
+target-version = ['py38', 'py39', 'py310']
+exclude = '''
+/(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | \.cache
+  | env
+  | venv
+  | \.aws-sam
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+
+
+[tool.mypy]
+files = 'src/**/*.py'
+exclude = '''(?x)(
+      \.eggs
+    | \.git          # root of the project
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | \.cache
+  | env
+  | venv
+  | \.aws-sam
+  | _build
+  | buck-out
+  | build
+  | dist
+  | package_
+)'''
+
+[[tool.mypy.overrides]]
+module = ["flyc.*"]
+ignore_missing_imports = true
+
+[tool.dep_checker.name_mapping]
+gitpython = "git"
+python-dateutil = "dateutil"
+
+[tool.dep_checker]
+namespace_packages = ["ruamel.yaml", "jaraco.docker"]

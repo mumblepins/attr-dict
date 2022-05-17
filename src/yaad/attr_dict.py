@@ -1,14 +1,14 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 import itertools
 from collections.abc import MutableMapping
-from typing import Mapping
+from typing import Mapping, Tuple
 
 
 class AttrDict(MutableMapping):
     """@DynamicAttrs"""
 
     # attributes that are included in the iteration (generally used for a property of a subclass)
-    _special_attributes = tuple()
+    _special_attributes: Tuple[str, ...] = ()
 
     def __setitem__(self, k, v):
         self._d[k] = v
@@ -22,8 +22,7 @@ class AttrDict(MutableMapping):
     def __iter__(self):
         if self._special_attributes:
             return itertools.chain(self._d.__iter__(), self._special_attributes)
-        else:
-            return self._d.__iter__()
+        return self._d.__iter__()
 
     def __setattr__(self, key, value):
         if key.startswith("_"):
@@ -38,9 +37,10 @@ class AttrDict(MutableMapping):
     # def __len__(self) -> int:
     #     return self._.__len__()
 
-    def __init__(self, *args, _parent_key=None, **kwargs):
+    def __init__(self, *args, _parent_key=None, _wrapper_type=None, **kwargs):
         super().__init__()
         self._parent_key = _parent_key
+        self._wrapper_type = _wrapper_type
         self._d = dict(*args, **kwargs)
 
     def __getattr__(self, k):
@@ -56,7 +56,9 @@ class AttrDict(MutableMapping):
         else:
             v = self._d[k]
         if isinstance(v, Mapping):
-            return AttrDict(v)
+            return AttrDict(v, _wrapper_type=self._wrapper_type)
+        if self._wrapper_type is not None:
+            return self._wrapper_type(v)
         return v
 
     def __repr__(self):
@@ -69,11 +71,17 @@ class AttrDict(MutableMapping):
             if isinstance(v, Mapping):
                 yield k, AttrDict(v)
             else:
-                yield k, v
+                if self._wrapper_type is not None:
+                    yield k, self._wrapper_type(v)
+                else:
+                    yield k, v
 
     def items_flat(self):
         for k, v in self.items(flat_key=True):
             if isinstance(v, Mapping):
-                yield from AttrDict(v, _parent_key=k).items_flat()
+                yield from AttrDict(v, _parent_key=k, _wrapper_type=self._wrapper_type).items_flat()
             else:
-                yield k, v
+                if self._wrapper_type is not None:
+                    yield k, self._wrapper_type(v)
+                else:
+                    yield k, v

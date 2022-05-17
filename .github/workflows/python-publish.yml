@@ -1,0 +1,80 @@
+name: Python Publish
+
+on: [ push, pull_request ]
+
+jobs:
+  pre_job:
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@master
+        with:
+          concurrent_skipping: 'same_content'
+          do_not_skip: '["pull_request", "workflow_dispatch", "schedule", "create", "release"]'
+
+
+  pre-commit:
+    needs: pre_job
+    if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.10'
+
+      - name: Poetry
+        uses: abatilo/actions-poetry@v2.1.4
+        with:
+          poetry-version: 1.2.0b1
+      - name: install dependencies
+        run: |
+          poetry install
+      #      - name: run pre-commit
+      #        run: poetry run pre-commit run --all-files
+
+      - uses: pre-commit/action@v2.0.3
+      - name: run tests
+        run: |
+          poetry run pytest "tests/" \
+          --verbose -n2 \
+          --cov=aws_lambda_python_packager \
+          --pyargs "aws_lambda_python_packager" \
+          --cov-report=html --cov-report=term --cov-report=xml
+      - uses: codecov/codecov-action@v2
+        with:
+          files: ./coverage.xml
+  deploy:
+    needs:
+      - pre_job
+      - pre-commit
+    if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.10'
+      - name: Poetry
+        uses: abatilo/actions-poetry@v2.1.4
+        with:
+          poetry-version: 1.2.0b1
+
+      - name: install dependencies
+        run: |
+          poetry install
+      - name: build
+        run: |
+          poetry build
+          echo $GITHUB_REF
+      - name: publish
+        if: contains(github.ref, 'refs/tags/v')
+        env:
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
+        run: |
+          poetry publish || poetry publish
