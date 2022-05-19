@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>yaad.attr_dict &mdash; yaad v0.1.0 documentation</title>
+  <title>yaad.attr_dict &mdash; yaad v1.0.2 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -72,7 +72,31 @@
 
 
 <div class="viewcode-block" id="AttrDict"><a class="viewcode-back" href="../../yaad.html#yaad.attr_dict.AttrDict">[docs]</a><span class="k">class</span> <span class="nc">AttrDict</span><span class="p">(</span><span class="n">MutableMapping</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;@DynamicAttrs&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;A dictionary wrapper with recursive attribute access.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        *args: args to pass to dict constructor</span>
+<span class="sd">        wrapper_type: optional class to wrap all returned values in.</span>
+<span class="sd">        _parent_key: private attribute to store the key of the parent dict.</span>
+<span class="sd">        **kwargs: kwargs to pass to dict constructor</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; d = AttrDict(a=1, b={&#39;c&#39;: 2})</span>
+<span class="sd">        &gt;&gt;&gt; d.b.c</span>
+<span class="sd">        2</span>
+<span class="sd">        &gt;&gt;&gt; d.d = 3</span>
+<span class="sd">        &gt;&gt;&gt; d</span>
+<span class="sd">        AttrDict({&#39;a&#39;: 1, &#39;b&#39;: {&#39;c&#39;: 2}, &#39;d&#39;: 3})</span>
+
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">wrapper_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_parent_key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parent_key</span> <span class="o">=</span> <span class="n">_parent_key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_wrapper_type</span> <span class="o">=</span> <span class="n">wrapper_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># attributes that are included in the iteration (generally used for a property of a subclass)</span>
     <span class="n">_special_attributes</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
@@ -103,12 +127,6 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">_parent_key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_wrapper_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_parent_key</span> <span class="o">=</span> <span class="n">_parent_key</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_wrapper_type</span> <span class="o">=</span> <span class="n">_wrapper_type</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
     <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_d</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
@@ -124,7 +142,7 @@
     <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
         <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_item_no_wrapper</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">_wrapper_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_wrapper_type</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">wrapper_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_wrapper_type</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maybe_wrap</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -150,7 +168,7 @@
 <div class="viewcode-block" id="AttrDict.items_flat"><a class="viewcode-back" href="../../yaad.html#yaad.attr_dict.AttrDict.items_flat">[docs]</a>    <span class="k">def</span> <span class="nf">items_flat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">flat_key</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
-                <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">_parent_key</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">_wrapper_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_wrapper_type</span><span class="p">)</span><span class="o">.</span><span class="n">items_flat</span><span class="p">()</span>
+                <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">_parent_key</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">wrapper_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_wrapper_type</span><span class="p">)</span><span class="o">.</span><span class="n">items_flat</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">yield</span> <span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maybe_wrap</span><span class="p">(</span><span class="n">v</span><span class="p">)</span></div></div>
 </pre></div>

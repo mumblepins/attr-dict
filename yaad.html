@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>yaad package &mdash; yaad v0.1.0 documentation</title>
+  <title>yaad package &mdash; yaad v1.0.2 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -84,9 +84,28 @@
 <span id="yaad-attr-dict-module"></span><h2>yaad.attr_dict module<a class="headerlink" href="#module-yaad.attr_dict" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="yaad.attr_dict.AttrDict">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">yaad.attr_dict.</span></span><span class="sig-name descname"><span class="pre">AttrDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_parent_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_wrapper_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yaad/attr_dict.html#AttrDict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaad.attr_dict.AttrDict" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">yaad.attr_dict.</span></span><span class="sig-name descname"><span class="pre">AttrDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wrapper_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_parent_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yaad/attr_dict.html#AttrDict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaad.attr_dict.AttrDict" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MutableMapping</span></code></a></p>
-<p>&#64;DynamicAttrs</p>
+<p>A dictionary wrapper with recursive attribute access.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*args</strong> – args to pass to dict constructor</p></li>
+<li><p><strong>wrapper_type</strong> – optional class to wrap all returned values in.</p></li>
+<li><p><strong>_parent_key</strong> – private attribute to store the key of the parent dict.</p></li>
+<li><p><strong>**kwargs</strong> – kwargs to pass to dict constructor</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">AttrDict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">c</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span>
+<span class="go">AttrDict({&#39;a&#39;: 1, &#39;b&#39;: {&#39;c&#39;: 2}, &#39;d&#39;: 3})</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="yaad.attr_dict.AttrDict.items">
 <span class="sig-name descname"><span class="pre">items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">a</span> <span class="pre">set-like</span> <span class="pre">object</span> <span class="pre">providing</span> <span class="pre">a</span> <span class="pre">view</span> <span class="pre">on</span> <span class="pre">D's</span> <span class="pre">items</span></span></span><a class="reference internal" href="_modules/yaad/attr_dict.html#AttrDict.items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaad.attr_dict.AttrDict.items" title="Permalink to this definition"></a></dt>
@@ -104,9 +123,28 @@
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-yaad" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="yaad.AttrDict">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">yaad.</span></span><span class="sig-name descname"><span class="pre">AttrDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_parent_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_wrapper_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yaad/attr_dict.html#AttrDict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaad.AttrDict" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">yaad.</span></span><span class="sig-name descname"><span class="pre">AttrDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wrapper_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_parent_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yaad/attr_dict.html#AttrDict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaad.AttrDict" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MutableMapping</span></code></a></p>
-<p>&#64;DynamicAttrs</p>
+<p>A dictionary wrapper with recursive attribute access.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*args</strong> – args to pass to dict constructor</p></li>
+<li><p><strong>wrapper_type</strong> – optional class to wrap all returned values in.</p></li>
+<li><p><strong>_parent_key</strong> – private attribute to store the key of the parent dict.</p></li>
+<li><p><strong>**kwargs</strong> – kwargs to pass to dict constructor</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">AttrDict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">c</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span>
+<span class="go">AttrDict({&#39;a&#39;: 1, &#39;b&#39;: {&#39;c&#39;: 2}, &#39;d&#39;: 3})</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="yaad.AttrDict.items">
 <span class="sig-name descname"><span class="pre">items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">a</span> <span class="pre">set-like</span> <span class="pre">object</span> <span class="pre">providing</span> <span class="pre">a</span> <span class="pre">view</span> <span class="pre">on</span> <span class="pre">D's</span> <span class="pre">items</span></span></span><a class="reference internal" href="_modules/yaad/attr_dict.html#AttrDict.items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaad.AttrDict.items" title="Permalink to this definition"></a></dt>
