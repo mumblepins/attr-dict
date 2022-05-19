@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "yaad"
-version = "1.0.1"
+version = "1.0.2"
 license = "MIT"
 description = "Yet Another Attribute Dict"
 authors = ["Daniel Sullivan <mumblepins@users.noreply.github.com>"]
@@ -33,11 +33,10 @@ skip_gitignore = true
 line_length = 88
 indent = "    "
 multi_line_output = 3
-default_section = "FIRSTPARTY"
 skip = "env"
 include_trailing_comma = true
 combine_as_imports = true
-force_grid_wrap = 0
+force_grid_wrap = 3
 
 [tool.black]
 line-length = 160

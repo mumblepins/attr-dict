@@ -80,7 +80,7 @@ def test_wrapper():
         def __delattr__(self, item):
             raise PermissionError("Cannot delete attribute")
 
-    d = AttrDict({"a": 1, "b": {"c": 2}}, _wrapper_type=ROWrapper)
+    d = AttrDict({"a": 1, "b": {"c": 2}}, wrapper_type=ROWrapper)
 
     assert isinstance(d.a, ROWrapper)
     assert d.a.data == 1
