@@ -60,7 +60,7 @@ def test_wrapper():
     class ROWrapper(Generic[T]):
         def __init__(self, data: T):
             self.data = data
-            self.__setattr__ = self.__sa__
+            self.__setattr__ = self.__sa__  # type: ignore
 
         def __getattr__(self, item):
             return getattr(self.data, item)
