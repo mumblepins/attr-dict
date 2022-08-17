@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from typing import Generic, TypeVar
 
-from yaad import AttrDict
+from yaad import AttrDict  # type: ignore
 
 
 def test_attr_dict():
@@ -55,6 +55,7 @@ def test_subclass():
 
 
 def test_wrapper():
+    # noinspection PyPep8Naming
     T = TypeVar("T")
 
     class ROWrapper(Generic[T]):
