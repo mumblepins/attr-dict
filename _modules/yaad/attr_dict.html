@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>yaad.attr_dict &mdash; yaad v1.0.3 documentation</title>
+  <title>yaad.attr_dict &mdash; yaad v1.1.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -101,6 +101,9 @@
     <span class="c1"># attributes that are included in the iteration (generally used for a property of a subclass)</span>
     <span class="n">_special_attributes</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
 
+    <span class="k">def</span> <span class="nf">__class__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
     <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
 
@@ -142,7 +145,7 @@
     <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
         <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_item_no_wrapper</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">wrapper_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_wrapper_type</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__init__</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">wrapper_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_wrapper_type</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maybe_wrap</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -154,7 +157,7 @@
             <span class="k">if</span> <span class="n">flat_key</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parent_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">k</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_parent_key</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
-                <span class="k">yield</span> <span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+                <span class="k">yield</span> <span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__init__</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">yield</span> <span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maybe_wrap</span><span class="p">(</span><span class="n">v</span><span class="p">)</span></div>
 
@@ -168,7 +171,7 @@
 <div class="viewcode-block" id="AttrDict.items_flat"><a class="viewcode-back" href="../../yaad.html#yaad.attr_dict.AttrDict.items_flat">[docs]</a>    <span class="k">def</span> <span class="nf">items_flat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">flat_key</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
-                <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">_parent_key</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">wrapper_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_wrapper_type</span><span class="p">)</span><span class="o">.</span><span class="n">items_flat</span><span class="p">()</span>
+                <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__init__</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">_parent_key</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">wrapper_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_wrapper_type</span><span class="p">)</span><span class="o">.</span><span class="n">items_flat</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">yield</span> <span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maybe_wrap</span><span class="p">(</span><span class="n">v</span><span class="p">)</span></div></div>
 </pre></div>
