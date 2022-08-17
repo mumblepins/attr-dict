@@ -34,6 +34,9 @@ class AttrDict(MutableMapping):
     # attributes that are included in the iteration (generally used for a property of a subclass)
     _special_attributes: Tuple[str, ...] = ()
 
+    def __class__init__(self, *args, **kwargs):
+        return self.__class__(*args, **kwargs)
+
     def __setitem__(self, k, v):
         self._d[k] = v
 
@@ -75,7 +78,7 @@ class AttrDict(MutableMapping):
     def __getitem__(self, k):
         v = self._get_item_no_wrapper(k)
         if isinstance(v, Mapping):
-            return self.__class__(v, wrapper_type=self._wrapper_type)
+            return self.__class__init__(v, wrapper_type=self._wrapper_type)
         return self._maybe_wrap(v)
 
     def __repr__(self):
@@ -87,7 +90,7 @@ class AttrDict(MutableMapping):
             if flat_key and self._parent_key is not None:
                 k = f"{self._parent_key}.{k}"
             if isinstance(v, Mapping):
-                yield k, self.__class__(v)
+                yield k, self.__class__init__(v)
             else:
                 yield k, self._maybe_wrap(v)
 
@@ -101,6 +104,6 @@ class AttrDict(MutableMapping):
     def items_flat(self):
         for k, v in self.items(flat_key=True):
             if isinstance(v, Mapping):
-                yield from self.__class__(v, _parent_key=k, wrapper_type=self._wrapper_type).items_flat()
+                yield from self.__class__init__(v, _parent_key=k, wrapper_type=self._wrapper_type).items_flat()
             else:
                 yield k, self._maybe_wrap(v)

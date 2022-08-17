@@ -40,16 +40,24 @@ def test_nested_dict():
 
 def test_subclass():
     class SubAttrDict(AttrDict):
+        def __init__(self, *args, account_id=None, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.account_id = account_id
+
+        def __class__init__(self, *args, **kwargs):
+            return self.__class__(*args, account_id=self.account_id, **kwargs)
+
         _special_attributes = ("special_attr",)
 
         @property
         def special_attr(self):
             return "this is a special attribute"
 
-    d = SubAttrDict({"a": 1, "b": {"c": 2}})
+    d = SubAttrDict({"a": 1, "b": {"c": 2}}, account_id=12354)
     assert list(d.items()) == [
         ("a", 1),
-        ("b", SubAttrDict({"c": 2})),
+        ("b", SubAttrDict({"c": 2}, account_id=12354)),
+        ("account_id", 12354),
         ("special_attr", "this is a special attribute"),
     ]
 
@@ -60,8 +68,8 @@ def test_wrapper():
 
     class ROWrapper(Generic[T]):
         def __init__(self, data: T):
-            self.data = data
-            self.__setattr__ = self.__sa__  # type: ignore
+            self._data = data
+            # self.__setattr__ = self.__sa__  # type: ignore
 
         def __getattr__(self, item):
             return getattr(self.data, item)
@@ -75,8 +83,11 @@ def test_wrapper():
         def __delitem__(self, key):
             raise PermissionError("Cannot delete item")
 
-        def __sa__(self, key, value):  # noqa: pylint: disable=no-self-use
-            raise PermissionError("Cannot set attribute")
+        def __setattr__(self, key, value):  # noqa: pylint: disable=no-self-use
+            if key == "_data":
+                super().__setattr__(key, value)
+            else:
+                raise PermissionError("Cannot set attribute")
 
         def __delattr__(self, item):
             raise PermissionError("Cannot delete attribute")
@@ -84,11 +95,11 @@ def test_wrapper():
     d = AttrDict({"a": 1, "b": {"c": 2}}, wrapper_type=ROWrapper)
 
     assert isinstance(d.a, ROWrapper)
-    assert d.a.data == 1
+    assert d.a._data == 1
 
     i = list(d.items())
-    assert i[0][1].data == 1
+    assert i[0][1]._data == 1
     assert isinstance(i[0][1], ROWrapper)
     i = list(d.items_flat())
-    assert i[0][1].data == 1
+    assert i[0][1]._data == 1
     assert isinstance(i[0][1], ROWrapper)
