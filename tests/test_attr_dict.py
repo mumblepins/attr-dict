@@ -95,11 +95,11 @@ def test_wrapper():
     d = AttrDict({"a": 1, "b": {"c": 2}}, wrapper_type=ROWrapper)
 
     assert isinstance(d.a, ROWrapper)
-    assert d.a._data == 1
+    assert d.a._data == 1  # pylint: disable=protected-access
 
     i = list(d.items())
-    assert i[0][1]._data == 1
+    assert i[0][1]._data == 1  # pylint: disable=protected-access
     assert isinstance(i[0][1], ROWrapper)
     i = list(d.items_flat())
-    assert i[0][1]._data == 1
+    assert i[0][1]._data == 1  # pylint: disable=protected-access
     assert isinstance(i[0][1], ROWrapper)
